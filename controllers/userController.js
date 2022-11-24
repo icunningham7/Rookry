@@ -10,7 +10,7 @@ module.exports = {
     },
     // Get one user
     getUser(req, res) {
-        User.find({ _id: req.params.userId })
+        User.find({ _id: req.params.userId }).populate('thoughts').populate('friends')
             .then((user) => !user ? res.status(404).json({ message: 'No user found' }) : res.json(user))
             .catch((err) => res.status(500).json(err));
     },
@@ -74,8 +74,8 @@ module.exports = {
                 if (!user) {
                     res.status(404).json({ message: 'No user found' });
                 } else {
-                    Thought.deleteMany({ username: user.username });
-                    res.json(user);
+                    Thought.deleteMany({ username: user.username })
+                    .then( res.json(user) );
                 }
             })
             .catch((err) => {

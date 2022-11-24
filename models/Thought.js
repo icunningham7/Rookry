@@ -29,13 +29,16 @@ const thoughtSchema = new Schema(
     }
 );
 
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
+});
+
  function getCreatedAtDate() {
     return `${new Date(this.createdAt).getMonth() + 1}/${new Date(this.createdAt).getDate()}/${new Date(this.createdAt).getFullYear()}`;
 };
 
 const Thought = model('Thought', thoughtSchema);
 
-// TODO: Add virtual reactoinCount
 
 
 module.exports = Thought;
