@@ -14,19 +14,22 @@ const userSchema = new Schema(
             required: true,
             // TODO: Figure out matching validation
         },
-        thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought'}], // Array of _id of values ref Thought model
-        friends: [{ type: Schema.Types.ObjectId, ref: 'friend' }] // Array of _id of values ref User model
+        thoughts: [{ type: Schema.Types.ObjectId, ref: 'Thought'}], // Array of _id of values ref Thought model
+        friends: [{ type: Schema.Types.ObjectId, ref: 'User' }] // Array of _id of values ref User model
     },
     {
         toJSON: {
             virtuals: true,
         },
-        id: false,
     }
 );
 
 userSchema.virtual('friendCount').get(() => {
     return this.friends.length;
 });
+
+// TODO: Add virtual friendCount
+
+const User = model('User', userSchema);
 
 module.exports = User;

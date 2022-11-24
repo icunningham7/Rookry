@@ -1,4 +1,3 @@
-const { ObjectId } = require('bson');
 const { Schema, model, Types } = require('mongoose');
 
 const reactionSchema = new Schema(
@@ -25,12 +24,12 @@ const reactionSchema = new Schema(
         toJSON: {
             getters: true,
         },
-        id: false,
     }
 );
 
-reactionSchema.virtual('getCreatedAtDate').get(() => {
+reactionSchema.virtual('getCreatedAtDate').get(function () {
     return `${new Date(this.createdAt).getMonth() + 1}/${new Date(this.createdAt).getDate()}/${new Date(this.createdAt).getFullYear()}`;
 });
 
-module.exports = Reaction;
+
+module.exports = reactionSchema;
