@@ -5,7 +5,7 @@
 
 Rookry is an api for social media. It is a simple service to allow users to post thoughts and reactions and make friends.
 
-![Demo Video]:(https://watch.screencastify.com/v/NUIl6y26T9OuyuKlcP7J)
+Demo Video: [Watch Now](https://watch.screencastify.com/v/NUIl6y26T9OuyuKlcP7J)
 
 ## Project Requirements
 
