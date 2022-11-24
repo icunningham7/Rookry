@@ -11,6 +11,7 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
+            transform: getCreatedAtDate,
             default: Date.now,
         },
         username:
@@ -18,23 +19,19 @@ const thoughtSchema = new Schema(
             type: String,
             required: true
         },
-        reactions: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Reaction',
-            },
-        ]
+        reactions: [reactionSchema]
     },
     {
         toJSON: {
             getters: true,
         },
+        id: false
     }
 );
 
-thoughtSchema.virtual('getCreatedAtDate').get(() => {
+ function getCreatedAtDate() {
     return `${new Date(this.createdAt).getMonth() + 1}/${new Date(this.createdAt).getDate()}/${new Date(this.createdAt).getFullYear()}`;
-});
+};
 
 const Thought = model('Thought', thoughtSchema);
 

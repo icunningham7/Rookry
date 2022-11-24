@@ -9,7 +9,7 @@ connection.once('open', async () => {
     await User.deleteMany({});
     await Thought.deleteMany({});
 
-    users.forEach(user => {
+    await users.forEach(user => {
         User.create({
             username: user,
             email: `${user}@place.com`,
@@ -17,26 +17,27 @@ connection.once('open', async () => {
         });
     });
 
-    await thoughts.forEach(async (thought) => {
-        const newThought = Thought.create({
-            thoughtText: thought,
-            username: await User.findOne({}).select('username').exec()
-        });
-    });
+    // await thoughts.forEach(async (thought) => {
+    //     const newThought = Thought.create({
+    //         thoughtText: thought,
+    //         username: await User.findOne({}).select('username').exec()
+    //     });
+    // });
 
-    // let userCount = await User.find({}).exec();
-    userCount = await User.countDocuments({}).exec();
-    console.log('userCount:', userCount);
+    let userCount = await User.find({}).exec();
+    // userCount = await User.countDocuments();
+    
+    console.log("Count :", userCount);
+    // console.log('userCount:', userCount);
 
-    const userCollection = await User.find({}).exec();
     // console.log('userCollection:', userCollection);
 
 
-    const thoughtCollection = await Thought.find({}).exec()
+    // const thoughtCollection = await Thought.find({}).exec()
     
 
-    userCount = await User.countDocuments({}).exec();
-    console.log('userCount:', userCount);
+    // userCount = await User.countDocuments({}).exec();
+    // console.log('userCount:', userCount);
     // console.log('thoughtCollection:', thoughtCollection);
 
     

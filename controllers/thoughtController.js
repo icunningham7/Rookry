@@ -18,11 +18,14 @@ module.exports = {
     createThought(req, res) {
         Thought.create(req.body)
             .then((thought) => {
-                User.findOneAndUpdate({ _id: req.body.userId },
-                    { $push: thought.id },
+                User.findOneAndUpdate({ username: req.body.username },
+                    {
+                        $push: {
+                            thoughts: thought._id
+                        }
+                    },
                     { runValidators: true, new: true }
-                )
-                res.json(thought)
+                ).then(res.json(thought));
             })
             .catch((err) => {
                 console.error(err);
@@ -35,7 +38,21 @@ module.exports = {
             { $set: req.body },
             { runValidators: true, new: true }
         )
-            .then((thought) => !thought ? res.status(404).json({ message: 'No thought found' }) : res.json(thought))
+            .then((thought) => {
+                if (!thought) {
+                    res.status(404).json({ message: 'No thought found' });
+                }
+                else {
+                    if (req.body.username) {
+                        User.findOneAndUpdate({ username: req.body.username },
+                            {
+                                $addToSet: {
+                                    thoughts: thought._id
+                                }
+                            }).then(res.json(thought));
+                    } else { res.json(thought) }
+                }
+            })
             .catch((err) => {
                 console.error(err);
                 res.status(500).json(err)
@@ -50,10 +67,10 @@ module.exports = {
                 } else {
                     User.findOneAndUpdate({ username: thought.username },
                         {
-                            $pull: { 
-                        thoughts: req.params.thoughtId
-                    }});
-                    res.json(user);
+                            $pull: {
+                                thoughts: req.params.thoughtId
+                            }
+                        }).then( res.json(thought) );
                 }
             })
             .catch((err) => {

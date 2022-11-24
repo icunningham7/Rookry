@@ -4,7 +4,7 @@ const { User, Thought, Reaction } = require('../models');
 module.exports = {
     // Get all users
     getAllUsers(req, res) {
-        User.find()
+        User.find({})
             .then((users) => !users ? res.status(404).json({ message: 'No users found' }) : res.json(users))
             .catch((err) => res.status(500).json(err));
     },
@@ -38,7 +38,11 @@ module.exports = {
     // Add a friend to user's friendlist
     createUserFriend(req, res) {
         User.findOneAndUpdate({ _id: req.params.userId },
-            { $push: req.params.friendId },
+            {
+                $addToSet: {
+                    friends: req.params.friendId
+                }
+            },
             { runValidators: true, new: true }
         )
             .then((user) => !user ? res.status(404).json({ message: 'No user found' }) : res.json(user))
@@ -50,7 +54,11 @@ module.exports = {
     // Remove a friend to user's friendlist
     deleteUserFriend(req, res) {
         User.findOneAndUpdate({ _id: req.params.userId },
-            { $pull: req.params.friendId },
+            {
+                $pull: {
+                    friends: req.params.friendId
+                }
+            },
             { runValidators: true, new: true }
         )
             .then((user) => !user ? res.status(404).json({ message: 'No user found' }) : res.json(user))

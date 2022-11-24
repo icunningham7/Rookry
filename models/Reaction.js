@@ -17,6 +17,7 @@ const reactionSchema = new Schema(
         },
         createdAt: {
             type: Date,
+            transform: getCreatedAtDate,
             default: Date.now,
         }
     },
@@ -24,12 +25,14 @@ const reactionSchema = new Schema(
         toJSON: {
             getters: true,
         },
+        id: false,
+        _id: false
     }
 );
 
-reactionSchema.virtual('getCreatedAtDate').get(function () {
+function getCreatedAtDate() {
     return `${new Date(this.createdAt).getMonth() + 1}/${new Date(this.createdAt).getDate()}/${new Date(this.createdAt).getFullYear()}`;
-});
+};
 
 
 module.exports = reactionSchema;
